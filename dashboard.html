@@ -30,20 +30,20 @@
 </div>
 
 <script>
-fetch("http://localhost:8080/api/students")
+fetch("https://studentmanagementsystem-kbv3.onrender.com/api/students")
 .then(res => res.json())
 .then(data => document.getElementById("totalStudents").innerText = data.length);
 
-fetch("http://localhost:8080/api/subjects")
+fetch("https://studentmanagementsystem-kbv3.onrender.com/api/subjects")
 .then(res => res.json())
 .then(data => document.getElementById("totalSubjects").innerText = data.length);
 
-fetch("http://localhost:8080/api/users")
+fetch("https://studentmanagementsystem-kbv3.onrender.com/api/users")
 .then(res => res.json())
 .then(data => document.getElementById("totalUsers").innerText = data.length);
 
 const today = new Date().toISOString().split("T")[0];
-fetch(`http://localhost:8080/api/attendance/date/${today}`)
+fetch(`https://studentmanagementsystem-kbv3.onrender.com/api/attendance/date/${today}`)
 .then(res => res.json())
 .then(data => document.getElementById("todayAttendance").innerText = data.length);
 </script>
