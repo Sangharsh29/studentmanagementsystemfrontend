@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Attendance</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="sidebar">
+    <h2>STUDENT MANAGEMENT SYSTEM</h2>
+    <ul>
+        <li onclick="window.location.href='dashboard.html'">Dashboard</li>
+        <li onclick="window.location.href='student.html'">Student</li>
+        <li onclick="window.location.href='attendance.html'">Attendance</li>
+        <li onclick="window.location.href='marks.html'">Marks Entry</li>
+        <li onclick="window.location.href='result.html'">Result Report</li>
+        <li onclick="window.location.href='search.html'">Student Search</li>
+        <li onclick="window.location.href='index.html'">Logout</li>
+    </ul>
+</div>
+
+<div class="main-content">
+    <h2>Attendance</h2>
+
+    <label>Date :</label>
+    <input type="date" id="attendanceDate">
+
+    <label>Class :</label>
+    <input type="text" id="classInput" placeholder="e.g. ITI COPA">
+
+    <div class="btn-row">
+        <button onclick="loadClassStudents()">Load Students</button>
+    </div>
+
+    <h3>Attendance List</h3>
+    <table id="attendanceTable">
+        <tr>
+            <th>Student ID</th>
+            <th>Name</th>
+            <th>Status</th>
+        </tr>
+    </table>
+
+    <div class="btn-row">
+        <button onclick="saveAttendance()">Save Attendance</button>
+        <button onclick="clearAttendance()">Clear</button>
+    </div>
+</div>
+
+<script>
+const STUDENT_API = "http://localhost:8080/api/students";
+const ATTENDANCE_API = "http://localhost:8080/api/attendance";
+
+let currentStudents = []; 
+
+document.getElementById("attendanceDate").max =
+new Date().toISOString().split("T")[0];
+
+function loadClassStudents() {
+    const className = document.getElementById("classInput").value;
+    if (!className) { alert("Enter a class first"); return; }
+
+    fetch(STUDENT_API)
+    .then(res => res.json())
+    .then(data => {
+        currentStudents = data.filter(s => s.className.toLowerCase() === className.toLowerCase());
+
+        const table = document.getElementById("attendanceTable");
+        table.innerHTML = "<tr><th>Student ID</th><th>Name</th><th>Status</th></tr>";
+
+        currentStudents.forEach(student => {
+            const row = table.insertRow();
+            row.innerHTML = `
+                <td>${student.studentId}</td>
+                <td>${student.name}</td>
+                <td>
+                    <select id="status_${student.studentId}">
+                        <option value="Present">Present</option>
+                        <option value="Absent">Absent</option>
+                    </select>
+                </td>
+            `;
+        });
+    });
+}
+
+function saveAttendance() {
+    const date = document.getElementById("attendanceDate").value;
+    if (!date) { alert("Select a date first"); return; }
+    if (currentStudents.length === 0) { alert("Load students first"); return; }
+
+    let savedCount = 0;
+
+    currentStudents.forEach(student => {
+        const status = document.getElementById(`status_${student.studentId}`).value;
+
+        fetch(ATTENDANCE_API, {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify({
+                date: date,
+                status: status,
+                student: { studentId: student.studentId }
+            })
+        })
+        .then(() => {
+            savedCount++;
+            if (savedCount === currentStudents.length) {
+                alert("Attendance saved successfully");
+            }
+        });
+    });
+}
+
+function clearAttendance() {
+    document.getElementById("attendanceDate").value = "";
+    document.getElementById("classInput").value = "";
+    document.getElementById("attendanceTable").innerHTML = "<tr><th>Student ID</th><th>Name</th><th>Status</th></tr>";
+    currentStudents = [];
+}
+</script>
+
+</body>
+</html>

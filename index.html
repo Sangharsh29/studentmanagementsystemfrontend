@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>Login - Student Management System</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="login-page">
+
+    <div class="login-box">
+
+        <div class="login-left">
+            <img src="graduate.jpeg" alt="Student">
+        </div>
+
+        <div class="login-right">
+
+            <h2>STUDENT MANAGEMENT SYSTEM</h2>
+
+            <div class="login-row">
+                <label>User Name :</label>
+                <input type="text" id="username" placeholder="Enter Username">
+            </div>
+
+            <div class="login-row">
+                <label>Password :</label>
+                <input type="password" id="password" placeholder="Enter Password">
+            </div>
+
+            <div class="login-buttons">
+                <button onclick="login()">Login</button>
+                <button onclick="window.location.reload()">Cancel</button>
+            </div>
+
+            <p id="message"></p>
+
+        </div>
+
+    </div>
+
+<script>
+
+function login() {
+
+    const username = document.getElementById("username").value;
+    const password = document.getElementById("password").value;
+
+    fetch("http://localhost:8080/api/auth/login", {
+
+        method: "POST",
+
+        headers: {
+            "Content-Type": "application/json"
+        },
+
+        body: JSON.stringify({
+
+            username: username,
+            password: password
+
+        })
+
+    })
+
+    .then(response => response.text())
+
+    .then(result => {
+
+        if(result === "SUCCESS"){
+
+            window.location.href = "dashboard.html";
+
+        }
+
+        else{
+
+            document.getElementById("message").innerText =
+            "Invalid Username or Password";
+
+        }
+
+    })
+
+    .catch(error => {
+
+        document.getElementById("message").innerText =
+        "Error connecting to server";
+
+        console.log(error);
+
+    });
+
+}
+
+</script>
+
+</body>
+
+</html>

@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Student Registration</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="sidebar">
+    <h2>STUDENT MANAGEMENT SYSTEM</h2>
+    <ul>
+        <li onclick="window.location.href='dashboard.html'">Dashboard</li>
+        <li onclick="window.location.href='student.html'">Student</li>
+        <li onclick="window.location.href='attendance.html'">Attendance</li>
+        <li onclick="window.location.href='marks.html'">Marks Entry</li>
+        <li onclick="window.location.href='result.html'">Result Report</li>
+        <li onclick="window.location.href='search.html'">Student Search</li>
+        <li onclick="window.location.href='index.html'">Logout</li>
+    </ul>
+</div>
+
+<div class="main-content">
+    <h2>Student Registration</h2>
+
+    <input type="hidden" id="studentId">
+    <label>Name :</label>
+    <input type="text" id="name">
+
+    <label>Class :</label>
+    <input type="text" id="className">
+
+    <label>Mobile No :</label>
+    <input type="text" id="mobileNo">
+
+    <label>Address :</label>
+    <textarea id="address"></textarea>
+
+    <div class="btn-row">
+        <button onclick="saveStudent()">Save</button>
+        <button onclick="updateStudent()">Update</button>
+        <button onclick="deleteStudent()">Delete</button>
+        <button onclick="clearForm()">Clear</button>
+    </div>
+
+    <h3>Student List</h3>
+    <table id="studentTable">
+        <tr>
+            <th>Student ID</th>
+            <th>Name</th>
+            <th>Class</th>
+            <th>Mobile No</th>
+            <th>Address</th>
+        </tr>
+    </table>
+</div>
+
+<script>
+const API_URL = "http://localhost:8080/api/students";
+
+window.onload = loadStudents;
+
+function loadStudents() {
+    fetch(API_URL)
+    .then(res => res.json())
+    .then(data => {
+        const table = document.getElementById("studentTable");
+        table.innerHTML = "<tr><th>Student ID</th><th>Name</th><th>Class</th><th>Mobile No</th><th>Address</th></tr>";
+        data.forEach(student => {
+            const row = table.insertRow();
+            row.innerHTML = `<td>${student.studentId}</td><td>${student.name}</td><td>${student.className}</td><td>${student.mobileNo}</td><td>${student.address}</td>`;
+            row.onclick = function() { fillForm(student); };
+        });
+    });
+}
+
+function fillForm(student) {
+    document.getElementById("studentId").value = student.studentId;
+    document.getElementById("name").value = student.name;
+    document.getElementById("className").value = student.className;
+    document.getElementById("mobileNo").value = student.mobileNo;
+    document.getElementById("address").value = student.address;
+}
+
+function getFormData() {
+    return {
+        name: document.getElementById("name").value,
+        className: document.getElementById("className").value,
+        mobileNo: document.getElementById("mobileNo").value,
+        address: document.getElementById("address").value
+    };
+}
+
+function saveStudent() {
+    fetch(API_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(getFormData())
+    })
+    .then(res => res.json())
+    .then(() => { clearForm(); loadStudents(); });
+}
+
+function updateStudent() {
+    const id = document.getElementById("studentId").value;
+    if (!id) { alert("Select a student first"); return; }
+
+    fetch(`${API_URL}/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(getFormData())
+    })
+    .then(res => res.json())
+    .then(() => { clearForm(); loadStudents(); });
+}
+
+function deleteStudent() {
+    const id = document.getElementById("studentId").value;
+    if (!id) { alert("Select a student first"); return; }
+
+    fetch(`${API_URL}/${id}`, { method: "DELETE" })
+    .then(() => { clearForm(); loadStudents(); });
+}
+
+function clearForm() {
+    document.getElementById("studentId").value = "";
+    document.getElementById("name").value = "";
+    document.getElementById("className").value = "";
+    document.getElementById("mobileNo").value = "";
+    document.getElementById("address").value = "";
+}
+</script>
+
+</body>
+</html>
