@@ -41,61 +41,34 @@
     </div>
 
 <script>
+const BASE_URL = "https://studentmanagementsystem-kbv3.onrender.com";
 
 function login() {
-
     const username = document.getElementById("username").value;
     const password = document.getElementById("password").value;
 
-    fetch("https://studentmanagementsystem-kbv3.onrender.com/api/auth/login", {
-
+    fetch(BASE_URL + "/api/auth/login", {
         method: "POST",
-
-        headers: {
-            "Content-Type": "application/json"
-        },
-
-        body: JSON.stringify({
-
-            username: username,
-            password: password
-
-        })
-
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ username: username, password: password })
     })
-
     .then(response => response.text())
-
     .then(result => {
-
-        if(result === "SUCCESS"){
-
-            window.location.href = "dashboard.html";
-
-        }
-
-        else{
-
+        if (result === "SUCCESS") {
+            window.location.replace("dashboard.html");
+        } else {
             document.getElementById("message").innerText =
             "Invalid Username or Password";
-
         }
-
     })
-
     .catch(error => {
-
         document.getElementById("message").innerText =
         "Error connecting to server";
-
         console.log(error);
-
     });
-
 }
-
 </script>
 
 </body>
-
 </html>

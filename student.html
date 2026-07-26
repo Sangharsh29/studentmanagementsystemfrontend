@@ -3,8 +3,9 @@
 <head>
 <title>Student Registration</title>
 <link rel="stylesheet" href="style.css">
+<script src="auth.js"></script>
 </head>
-<body>
+<body onload="init()">
 
 <div class="sidebar">
     <h2>STUDENT MANAGEMENT SYSTEM</h2>
@@ -15,7 +16,7 @@
         <li onclick="window.location.href='marks.html'">Marks Entry</li>
         <li onclick="window.location.href='result.html'">Result Report</li>
         <li onclick="window.location.href='search.html'">Student Search</li>
-        <li onclick="window.location.href='index.html'">Logout</li>
+        <li onclick="logout()">Logout</li>
     </ul>
 </div>
 
@@ -58,12 +59,15 @@
 </div>
 
 <script>
-const API_URL = "https://studentmanagementsystem-kbv3.onrender.com/api/students";
+const API_URL = BASE_URL + "/api/students";
 
-window.onload = loadStudents;
+function init() {
+    checkSession();
+    loadStudents();
+}
 
 function loadStudents() {
-    fetch(API_URL)
+    fetch(API_URL, { credentials: "include" })
     .then(res => res.json())
     .then(data => {
         const table = document.getElementById("studentTable");
@@ -98,6 +102,7 @@ function saveStudent() {
     fetch(API_URL, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(getFormData())
     })
     .then(res => res.json())
@@ -107,10 +112,10 @@ function saveStudent() {
 function updateStudent() {
     const id = document.getElementById("studentId").value;
     if (!id) { alert("Select a student first"); return; }
-
-    fetch(`${API_URL}/${id}`, {
+    fetch(API_URL + "/" + id, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
+        credentials: "include",
         body: JSON.stringify(getFormData())
     })
     .then(res => res.json())
@@ -120,8 +125,7 @@ function updateStudent() {
 function deleteStudent() {
     const id = document.getElementById("studentId").value;
     if (!id) { alert("Select a student first"); return; }
-
-    fetch(`${API_URL}/${id}`, { method: "DELETE" })
+    fetch(API_URL + "/" + id, { method: "DELETE", credentials: "include" })
     .then(() => { clearForm(); loadStudents(); });
 }
 
@@ -133,6 +137,3 @@ function clearForm() {
     document.getElementById("address").value = "";
 }
 </script>
-
-</body>
-</html>

@@ -3,8 +3,9 @@
 <head>
 <title>Result Report</title>
 <link rel="stylesheet" href="style.css">
+<script src="auth.js"></script>
 </head>
-<body>
+<body onload="checkSession()">
 
 <div class="sidebar">
     <h2>STUDENT MANAGEMENT SYSTEM</h2>
@@ -15,7 +16,7 @@
         <li onclick="window.location.href='marks.html'">Marks Entry</li>
         <li onclick="window.location.href='result.html'">Result Report</li>
         <li onclick="window.location.href='search.html'">Student Search</li>
-        <li onclick="window.location.href='index.html'">Logout</li>
+        <li onclick="logout()">Logout</li>
     </ul>
 </div>
 

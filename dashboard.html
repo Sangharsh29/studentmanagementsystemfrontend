@@ -3,8 +3,9 @@
 <head>
 <title>Dashboard</title>
 <link rel="stylesheet" href="style.css">
+<script src="auth.js"></script>
 </head>
-<body>
+<body onload="checkSession()">
 
 <div class="sidebar">
     <h2>STUDENT MANAGEMENT SYSTEM</h2>
@@ -15,7 +16,7 @@
         <li onclick="window.location.href='marks.html'">Marks Entry</li>
         <li onclick="window.location.href='result.html'">Result Report</li>
         <li onclick="window.location.href='search.html'">Student Search</li>
-        <li onclick="window.location.href='index.html'">Logout</li>
+        <li onclick="logout()">Logout</li>
     </ul>
 </div>
 
@@ -30,20 +31,20 @@
 </div>
 
 <script>
-fetch("https://studentmanagementsystem-kbv3.onrender.com/api/students")
+fetch(BASE_URL + "/api/students", { credentials: "include" })
 .then(res => res.json())
 .then(data => document.getElementById("totalStudents").innerText = data.length);
 
-fetch("https://studentmanagementsystem-kbv3.onrender.com/api/subjects")
+fetch(BASE_URL + "/api/subjects", { credentials: "include" })
 .then(res => res.json())
 .then(data => document.getElementById("totalSubjects").innerText = data.length);
 
-fetch("https://studentmanagementsystem-kbv3.onrender.com/api/users")
+fetch(BASE_URL + "/api/users", { credentials: "include" })
 .then(res => res.json())
 .then(data => document.getElementById("totalUsers").innerText = data.length);
 
 const today = new Date().toISOString().split("T")[0];
-fetch(`https://studentmanagementsystem-kbv3.onrender.com/api/attendance/date/${today}`)
+fetch(BASE_URL + "/api/attendance/date/" + today, { credentials: "include" })
 .then(res => res.json())
 .then(data => document.getElementById("todayAttendance").innerText = data.length);
 </script>

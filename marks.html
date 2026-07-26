@@ -3,8 +3,9 @@
 <head>
 <title>Marks Entry</title>
 <link rel="stylesheet" href="style.css">
+<script src="auth.js"></script>
 </head>
-<body>
+<body onload="checkSession()">
 
 <div class="sidebar">
     <h2>STUDENT MANAGEMENT SYSTEM</h2>
@@ -15,7 +16,7 @@
         <li onclick="window.location.href='marks.html'">Marks Entry</li>
         <li onclick="window.location.href='result.html'">Result Report</li>
         <li onclick="window.location.href='search.html'">Student Search</li>
-        <li onclick="window.location.href='index.html'">Logout</li>
+        <li onclick="logout()">Logout</li>
     </ul>
 </div>
 
@@ -63,7 +64,7 @@ const SUBJECT_API = "https://studentmanagementsystem-kbv3.onrender.com/api/subje
 window.onload = loadSubjectDropdown;
 
 function loadSubjectDropdown() {
-    fetch(SUBJECT_API)
+    fetch(STUDENT_API, { credentials: "include" })
     .then(res => res.json())
     .then(data => {
         const dropdown = document.getElementById("subjectInput");
