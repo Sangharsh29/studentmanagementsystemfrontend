@@ -529,3 +529,30 @@ RESPONSIVE
   padding: 20px;
   text-align: center;
 }
+
+.error-toast {
+  position: fixed;
+  bottom: 30px;
+  right: 30px;
+  background-color: #c0392b;
+  color: white;
+  padding: 14px 20px;
+  border-radius: 6px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  z-index: 9999;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  font-size: 14px;
+  max-width: 360px;
+}
+
+.error-toast button {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+  padding: 0;
+  line-height: 1;
+}
