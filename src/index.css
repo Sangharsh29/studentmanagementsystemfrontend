@@ -475,3 +475,57 @@ RESPONSIVE
     border-bottom:2px solid #1b3d73;
     padding-bottom:15px;
 }
+
+/* existing style.css content stays, add these below */
+
+.layout {
+  display: flex;
+}
+
+.login-page {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #f0f4f8;
+}
+
+.sidebar a {
+  text-decoration: none;
+  color: inherit;
+  display: block;
+  padding: 12px;
+  border-radius: 4px;
+}
+
+.sidebar a.active {
+  background-color: #1a3c6e;
+  color: white;
+}
+
+.logout-btn {
+  width: 100%;
+  text-align: left;
+  background: none;
+  border: none;
+  padding: 12px;
+  cursor: pointer;
+  font-size: 14px;
+  color: inherit;
+}
+
+.logout-btn:hover {
+  background-color: #eef3fa;
+  border-radius: 4px;
+}
+
+.error {
+  color: red;
+  font-size: 12px;
+  margin: 2px 0 6px 0;
+}
+
+.loading {
+  padding: 20px;
+  text-align: center;
+}
