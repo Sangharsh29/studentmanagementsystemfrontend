@@ -9,20 +9,26 @@ const api = axios.create({
 api.interceptors.response.use(
   response => response,
   error => {
-    if (error.response?.status === 401) {
-      // Token expired or invalid — send to login
-      window.location.replace('/login')
+    const status = error.response?.status
+
+    if (status === 401) {
+      // Show message briefly before redirecting
+      window.dispatchEvent(new CustomEvent('app-error', {
+        detail: 'Session expired. Please log in again.'
+      }))
+      setTimeout(() => {
+        window.location.replace('/login')
+      }, 1500)
     } else if (!error.response) {
-      // Network error or CORS — server unreachable
       window.dispatchEvent(new CustomEvent('app-error', {
         detail: 'Cannot connect to server. Please try again.'
       }))
     } else {
-      // Any other server error
       window.dispatchEvent(new CustomEvent('app-error', {
-        detail: 'Something went wrong. Please try again.'
+        detail: `Error ${status}: Something went wrong. Please try again.`
       }))
     }
+
     return Promise.reject(error)
   }
 )
