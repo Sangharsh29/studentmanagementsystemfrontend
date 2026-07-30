@@ -63,7 +63,7 @@ function Student() {
     <div className="layout">
       <Sidebar />
       <div className="main-content">
-        <h2>Student Registration ({studentCount} students)</h2>
+        <h2>Student Registration</h2>
 
         <label>Student ID :</label>
         <input {...register('studentId')} placeholder="Enter Student ID" />
