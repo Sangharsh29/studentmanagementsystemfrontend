@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from 'react-router-dom'
 import ProtectedRoute from './components/ProtectedRoute'
 import ErrorToast from './components/ErrorToast'
+import { useTabClose } from './hooks/useTabClose'
 import Login from './pages/Login'
 import Dashboard from './pages/Dashboard'
 import Student from './pages/Student'
@@ -10,6 +11,8 @@ import Result from './pages/Result'
 import Search from './pages/Search'
 
 function App() {
+  useTabClose()
+
   return (
     <>
       <ErrorToast />
